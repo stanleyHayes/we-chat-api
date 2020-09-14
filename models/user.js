@@ -93,6 +93,10 @@ userSchema.methods.getToken = async function (fields) {
     return token;
 }
 
+userSchema.methods.matchPassword = function (password) {
+    return bcrypt.compare(this.password, password);
+}
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

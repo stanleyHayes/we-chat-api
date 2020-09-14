@@ -20,11 +20,18 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const {username, password} = req.body;
-        let user = await User.findOne({username, password});
+        let user = await User.findOne({username});
+
         if(!user){
             return res.status(401).json({error: 'Authentication failed'});
         }
+
+        if(!user.matchPassword(password)){
+            return res.status(401).json({error: 'Authentication failed'});
+        }
+
         const token = await user.getToken(req.useragent);
+        await user.save();
         res.status(200).json({data: user, token});
     }catch (e){
         res.status(500).json({error: e.message});
