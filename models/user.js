@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
-const useragent = require("express-useragent");
 
 const Schema = mongoose.Schema;
 
@@ -38,6 +37,13 @@ const userSchema = new Schema({
     },
     lastSeen: {
         type: Date,
+    },
+    avatar: {
+        type: Buffer
+    },
+    contacts: {
+        type: [Schema.Types.ObjectId],
+        ref: 'User'
     },
     tokens: {
         type: [

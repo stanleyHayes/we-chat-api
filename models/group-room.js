@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const chatSchema = new Schema({
+const groupSchema = new Schema({
     name: {
         type: String,
         required: [true, "name field required"],
@@ -11,6 +11,10 @@ const chatSchema = new Schema({
     description: {
         type: String,
         trim: true
+    },
+    roomID:{
+        type: String,
+        required: [true, 'Room required']
     },
     members: {
         type: [
@@ -22,14 +26,14 @@ const chatSchema = new Schema({
                 joinedAt: {
                     type: Date,
                     default: Date.now()
+                },
+                role: {
+                    type: String,
+                    enum: ['REGULAR','ADMIN'],
+                    default: 'REGULAR'
                 }
             }
         ]
-    },
-    type: {
-        type: String,
-        enum: ['PRIVATE', 'GROUP'],
-        default: 'PRIVATE'
     },
     admins: {
         type: [Schema.Types.ObjectId],
@@ -46,6 +50,6 @@ const chatSchema = new Schema({
     }
 }, {timestamps: true});
 
-const Chatroom = mongoose.model("Chatroom", chatSchema);
+const GroupRoom = mongoose.model("Group", groupSchema);
 
-module.exports = Chatroom;
+module.exports = GroupRoom;

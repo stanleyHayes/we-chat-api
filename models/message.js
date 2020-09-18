@@ -21,9 +21,8 @@ const messageSchema = new Schema({
     media: {
         type: Buffer
     },
-    chatRoom: {
-        type: Schema.Types.ObjectId,
-        ref: "Chatroom",
+    roomID: {
+        type: String,
         required: [true, 'chatroom required']
     }
 }, {timestamps: true});

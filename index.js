@@ -6,8 +6,8 @@ const cors = require("cors");
 const helmet = require("helmet");
 const dotenv = require("dotenv");
 const useragent = require("express-useragent");
-const Chatroom = require("./models/chatroom");
-
+const Chatroom = require("./models/group-room");
+const Message = require("./models/message");
 dotenv.config({path: "./config/config.env"});
 const app = express();
 
@@ -49,9 +49,8 @@ io.use((socket, next) => {
 })
 
 io.on("connection", async socket => {
-    // console.log(`${socket.id} connected`);
-
     const userChatRooms = await Chatroom.find({"member.user": socket.user});
+    socket.emit('USER_ROOMS', {rooms: userChatRooms});
 
     socket.on('JOIN_ROOM', ({token, currentUser, roomId}, callback) => {
         socket.join(roomId);
@@ -63,6 +62,7 @@ io.on("connection", async socket => {
         io.to(room).emit('NEW_MESSAGE_TO_CLIENT', {text: message, sender: currentUser, chatRoom: room});
         callback();
     });
+
     socket.on("disconnect", () => {
         // console.log(`${socket.id} disconnected`);
     });
